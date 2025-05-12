@@ -13,12 +13,12 @@ import { TrendingUp, MapPin, Users, BookMarked } from 'lucide-react';
 import { mockCompanies, mockIndustries, growthMetrics } from '@/services/mockData';
 
 const Index = () => {
-  const [filterIndustry, setFilterIndustry] = useState<string>('');
+  const [filterIndustry, setFilterIndustry] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');
   
   const filteredCompanies = mockCompanies.filter(company => {
     return (
-      (!filterIndustry || company.industry === filterIndustry) &&
+      (filterIndustry === 'all' || company.industry === filterIndustry) &&
       (!searchTerm || 
         company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         company.industry.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -80,7 +80,7 @@ const Index = () => {
                   <SelectValue placeholder="All Industries" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Industries</SelectItem>
+                  <SelectItem value="all">All Industries</SelectItem>
                   {mockIndustries.map((industry) => (
                     <SelectItem key={industry} value={industry}>{industry}</SelectItem>
                   ))}
