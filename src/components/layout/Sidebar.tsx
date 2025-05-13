@@ -61,6 +61,12 @@ export function Sidebar() {
           active={path === '/'}
         />
         <SidebarItem 
+          icon={<BarChart2 size={18} />} 
+          label="Lead Dashboard" 
+          href="/dashboard"
+          active={path === '/dashboard'}
+        />
+        <SidebarItem 
           icon={<TrendingUp size={18} />} 
           label="Growth Signals" 
           href="/signals"
