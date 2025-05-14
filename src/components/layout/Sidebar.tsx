@@ -2,11 +2,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  TrendingUp, 
-  MapPin, 
-  Users, 
-  Activity, 
-  Settings, 
   BarChart2,
   Search
 } from 'lucide-react';
@@ -56,50 +51,11 @@ export function Sidebar() {
       <nav className="flex-1 p-2 space-y-1">
         <SidebarItem 
           icon={<BarChart2 size={18} />} 
-          label="Dashboard" 
-          href="/"
-          active={path === '/'}
-        />
-        <SidebarItem 
-          icon={<BarChart2 size={18} />} 
           label="Lead Dashboard" 
           href="/dashboard"
-          active={path === '/dashboard'}
-        />
-        <SidebarItem 
-          icon={<TrendingUp size={18} />} 
-          label="Growth Signals" 
-          href="/signals"
-          active={path === '/signals'}
-        />
-        <SidebarItem 
-          icon={<MapPin size={18} />} 
-          label="Geographic Expansion" 
-          href="/expansion"
-          active={path === '/expansion'}
-        />
-        <SidebarItem 
-          icon={<Users size={18} />} 
-          label="Hiring Surge" 
-          href="/hiring"
-          active={path === '/hiring'}
-        />
-        <SidebarItem 
-          icon={<Activity size={18} />} 
-          label="Lead Tracker" 
-          href="/tracker"
-          active={path === '/tracker'}
+          active={path === '/' || path === '/dashboard'}
         />
       </nav>
-      
-      <div className="mt-auto p-2">
-        <SidebarItem 
-          icon={<Settings size={18} />} 
-          label="Settings" 
-          href="/settings"
-          active={path === '/settings'}
-        />
-      </div>
     </div>
   );
 }
