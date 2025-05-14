@@ -1,6 +1,6 @@
+
 import React, { useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ArrowRight, Edit, MoreHorizontal, Search } from 'lucide-react';
@@ -157,6 +157,64 @@ const LeadDetails = ({ lead }: { lead: typeof mockLeads[0] }) => (
 
     <div className="space-y-6">
       <div>
+        <h3 className="text-lg font-semibold mb-4">Lead Scores</h3>
+        <div className="space-y-4">
+          <div>
+            <div className="flex justify-between mb-2">
+              <span className="text-sm">Fit Score</span>
+              <span className="font-medium">89</span>
+            </div>
+            <div className="h-2 w-full bg-muted rounded-full">
+              <div className="h-2 bg-blue-500 rounded-full" style={{ width: '89%' }}></div>
+            </div>
+          </div>
+          <div>
+            <div className="flex justify-between mb-2">
+              <span className="text-sm">Intent Score</span>
+              <span className="font-medium">78</span>
+            </div>
+            <div className="h-2 w-full bg-muted rounded-full">
+              <div className="h-2 bg-blue-500 rounded-full" style={{ width: '78%' }}></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold mb-4">ICP Matching Criteria</h3>
+        <div className="space-y-4">
+          <div className="flex justify-between items-center border-b border-border py-3">
+            <span className="text-sm">Ideal Customer Profile</span>
+            <div className="flex justify-between items-center gap-4">
+              <span>Mid-sized technology companies seeking cloud solutions</span>
+              <span className="text-green-500">✓</span>
+            </div>
+          </div>
+          <div className="flex justify-between items-center border-b border-border py-3">
+            <span className="text-sm">Geography</span>
+            <div className="flex justify-between items-center gap-4">
+              <span>North America</span>
+              <span className="text-green-500">✓</span>
+            </div>
+          </div>
+          <div className="flex justify-between items-center border-b border-border py-3">
+            <span className="text-sm">Annual Revenue</span>
+            <div className="flex justify-between items-center gap-4">
+              <span>$50M - $100M</span>
+              <span className="text-green-500">✓</span>
+            </div>
+          </div>
+          <div className="flex justify-between items-center border-b border-border py-3">
+            <span className="text-sm">Actively Hiring In</span>
+            <div className="flex justify-between items-center gap-4">
+              <span>Spain, Italy, France, Germany, Sweden, Ireland</span>
+              <span className="text-green-500">✓</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div>
         <div className="flex items-center justify-between mb-2">
           <h3 className="text-xl font-semibold">Company Information</h3>
           <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -212,64 +270,6 @@ const LeadDetails = ({ lead }: { lead: typeof mockLeads[0] }) => (
           <div className="flex">
             <div className="w-1/3 text-muted-foreground">Level</div>
             <div>{lead.level}</div>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <h3 className="text-lg font-semibold mb-4">Lead Scores</h3>
-        <div className="space-y-4">
-          <div>
-            <div className="flex justify-between mb-2">
-              <span className="text-sm">Fit Score</span>
-              <span className="font-medium">89</span>
-            </div>
-            <div className="h-2 w-full bg-muted rounded-full">
-              <div className="h-2 bg-blue-500 rounded-full" style={{ width: '89%' }}></div>
-            </div>
-          </div>
-          <div>
-            <div className="flex justify-between mb-2">
-              <span className="text-sm">Intent Score</span>
-              <span className="font-medium">78</span>
-            </div>
-            <div className="h-2 w-full bg-muted rounded-full">
-              <div className="h-2 bg-blue-500 rounded-full" style={{ width: '78%' }}></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <h3 className="text-lg font-semibold mb-4">ICP Matching Criteria</h3>
-        <div className="space-y-4">
-          <div className="flex justify-between items-center border-b border-border py-3">
-            <span className="text-sm">Ideal Customer Profile</span>
-            <div className="flex justify-between items-center gap-4">
-              <span>Mid-sized technology companies seeking cloud solutions</span>
-              <span className="text-green-500">✓</span>
-            </div>
-          </div>
-          <div className="flex justify-between items-center border-b border-border py-3">
-            <span className="text-sm">Geography</span>
-            <div className="flex justify-between items-center gap-4">
-              <span>North America</span>
-              <span className="text-green-500">✓</span>
-            </div>
-          </div>
-          <div className="flex justify-between items-center border-b border-border py-3">
-            <span className="text-sm">Annual Revenue</span>
-            <div className="flex justify-between items-center gap-4">
-              <span>$50M - $100M</span>
-              <span className="text-green-500">✓</span>
-            </div>
-          </div>
-          <div className="flex justify-between items-center border-b border-border py-3">
-            <span className="text-sm">Actively Hiring In</span>
-            <div className="flex justify-between items-center gap-4">
-              <span>Spain, Italy, France, Germany, Sweden, Ireland</span>
-              <span className="text-green-500">✓</span>
-            </div>
           </div>
         </div>
       </div>

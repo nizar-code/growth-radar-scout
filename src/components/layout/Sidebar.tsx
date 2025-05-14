@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import { 
   BarChart2,
   Users,
-  Search
+  Search,
+  Edit
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -61,6 +62,12 @@ export function Sidebar() {
           label="Leads" 
           href="/leads"
           active={path === '/leads'}
+        />
+        <SidebarItem 
+          icon={<Edit size={18} />} 
+          label="Pitch Generator" 
+          href="/pitch-generator"
+          active={path === '/pitch-generator'}
         />
       </nav>
     </div>
