@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/button';
@@ -6,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowRight, Edit, MoreHorizontal, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
+import { useNavigate } from 'react-router-dom';
 
 // Mock lead data 
 const mockLeads = [
@@ -124,158 +124,156 @@ const mockLeads = [
 ];
 
 // Lead details component for when a lead is selected
-const LeadDetails = ({ lead }: { lead: typeof mockLeads[0] }) => (
-  <div className="space-y-6">
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-4">
-        <div className="relative">
-          <div className="w-16 h-16 overflow-hidden rounded-full border-2 border-primary">
-            <img 
-              src={`https://flagcdn.com/${lead.country}.svg`} 
-              className="w-full h-full object-cover"
-              alt={`${lead.country} flag`}
-            />
-          </div>
-          <div className="absolute -bottom-1 -right-1 bg-primary text-xs text-white px-2 py-0.5 rounded-full">
-            {lead.status}
-          </div>
-        </div>
-        <h2 className="text-2xl font-bold">{lead.name}</h2>
-        <Badge variant="outline" className="bg-blue-600/20 text-blue-400 border-blue-600/20">
-          New
-        </Badge>
-      </div>
-      <div className="flex gap-2">
-        <Button variant="outline" size="sm" className="gap-1">
-          <MoreHorizontal size={16} />
-        </Button>
-        <Button className="gap-2">
-          Generate Pitch <ArrowRight size={16} />
-        </Button>
-      </div>
-    </div>
+const LeadDetails = ({ lead }: { lead: typeof mockLeads[0] }) => {
+  const navigate = useNavigate();
 
+  const handleGeneratePitch = () => {
+    navigate('/pitch-generator');
+  };
+
+  return (
     <div className="space-y-6">
-      <div>
-        <h3 className="text-lg font-semibold mb-4">Lead Scores</h3>
-        <div className="space-y-4">
-          <div>
-            <div className="flex justify-between mb-2">
-              <span className="text-sm">Fit Score</span>
-              <span className="font-medium">89</span>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="relative">
+            <div className="w-16 h-16 overflow-hidden rounded-full border-2 border-primary">
+              <img 
+                src={`https://flagcdn.com/${lead.country}.svg`} 
+                className="w-full h-full object-cover"
+                alt={`${lead.country} flag`}
+              />
             </div>
-            <div className="h-2 w-full bg-muted rounded-full">
-              <div className="h-2 bg-blue-500 rounded-full" style={{ width: '89%' }}></div>
-            </div>
-          </div>
-          <div>
-            <div className="flex justify-between mb-2">
-              <span className="text-sm">Intent Score</span>
-              <span className="font-medium">78</span>
-            </div>
-            <div className="h-2 w-full bg-muted rounded-full">
-              <div className="h-2 bg-blue-500 rounded-full" style={{ width: '78%' }}></div>
+            <div className="absolute -bottom-1 -right-1 bg-primary text-xs text-white px-2 py-0.5 rounded-full">
+              {lead.status}
             </div>
           </div>
+          <h2 className="text-2xl font-bold">{lead.name}</h2>
+          <Badge variant="outline" className="bg-blue-600/20 text-blue-400 border-blue-600/20">
+            New
+          </Badge>
+        </div>
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" className="gap-1">
+            <MoreHorizontal size={16} />
+          </Button>
+          <Button className="gap-2" onClick={handleGeneratePitch}>
+            Generate Pitch <ArrowRight size={16} />
+          </Button>
         </div>
       </div>
 
-      <div>
-        <h3 className="text-lg font-semibold mb-4">ICP Matching Criteria</h3>
-        <div className="space-y-4">
-          <div className="flex justify-between items-center border-b border-border py-3">
-            <span className="text-sm">Ideal Customer Profile</span>
-            <div className="flex justify-between items-center gap-4">
-              <span>Mid-sized technology companies seeking cloud solutions</span>
-              <span className="text-green-500">✓</span>
+      <div className="space-y-6">
+        <div>
+          <h3 className="text-lg font-semibold mb-4">Lead Scores</h3>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="p-4 bg-accent/50 rounded-lg">
+              <div className="text-sm text-muted-foreground">Fit Score</div>
+              <div className="text-2xl font-semibold mt-1">89</div>
             </div>
-          </div>
-          <div className="flex justify-between items-center border-b border-border py-3">
-            <span className="text-sm">Geography</span>
-            <div className="flex justify-between items-center gap-4">
-              <span>North America</span>
-              <span className="text-green-500">✓</span>
-            </div>
-          </div>
-          <div className="flex justify-between items-center border-b border-border py-3">
-            <span className="text-sm">Annual Revenue</span>
-            <div className="flex justify-between items-center gap-4">
-              <span>$50M - $100M</span>
-              <span className="text-green-500">✓</span>
-            </div>
-          </div>
-          <div className="flex justify-between items-center border-b border-border py-3">
-            <span className="text-sm">Actively Hiring In</span>
-            <div className="flex justify-between items-center gap-4">
-              <span>Spain, Italy, France, Germany, Sweden, Ireland</span>
-              <span className="text-green-500">✓</span>
+            <div className="p-4 bg-accent/50 rounded-lg">
+              <div className="text-sm text-muted-foreground">Intent Score</div>
+              <div className="text-2xl font-semibold mt-1">78</div>
             </div>
           </div>
         </div>
-      </div>
+
+        <div>
+          <h3 className="text-lg font-semibold mb-4">ICP Matching Criteria</h3>
+          <div className="space-y-4">
+            <div className="flex justify-between items-center border-b border-border py-3">
+              <span className="text-sm">Ideal Customer Profile</span>
+              <div className="flex justify-between items-center gap-4">
+                <span>Mid-sized technology companies seeking cloud solutions</span>
+                <span className="text-green-500">✓</span>
+              </div>
+            </div>
+            <div className="flex justify-between items-center border-b border-border py-3">
+              <span className="text-sm">Geography</span>
+              <div className="flex justify-between items-center gap-4">
+                <span>North America</span>
+                <span className="text-green-500">✓</span>
+              </div>
+            </div>
+            <div className="flex justify-between items-center border-b border-border py-3">
+              <span className="text-sm">Annual Revenue</span>
+              <div className="flex justify-between items-center gap-4">
+                <span>$50M - $100M</span>
+                <span className="text-green-500">✓</span>
+              </div>
+            </div>
+            <div className="flex justify-between items-center border-b border-border py-3">
+              <span className="text-sm">Actively Hiring In</span>
+              <div className="flex justify-between items-center gap-4">
+                <span>Spain, Italy, France, Germany, Sweden, Ireland</span>
+                <span className="text-green-500">✓</span>
+              </div>
+            </div>
+          </div>
+        </div>
       
-      <div>
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="text-xl font-semibold">Company Information</h3>
-          <Button variant="ghost" size="icon" className="h-8 w-8">
-            <Edit className="h-4 w-4" />
-          </Button>
+        <div>
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-xl font-semibold">Company Information</h3>
+            <Button variant="ghost" size="icon" className="h-8 w-8">
+              <Edit className="h-4 w-4" />
+            </Button>
+          </div>
+          <Separator className="mb-4" />
+          <div className="space-y-4">
+            <div className="flex">
+              <div className="w-1/3 text-muted-foreground">Company Name</div>
+              <div>{lead.name}</div>
+            </div>
+            <div className="flex">
+              <div className="w-1/3 text-muted-foreground">Industry</div>
+              <div>{lead.industry}</div>
+            </div>
+            <div className="flex">
+              <div className="w-1/3 text-muted-foreground">Location</div>
+              <div>{lead.location}</div>
+            </div>
+            <div className="flex">
+              <div className="w-1/3 text-muted-foreground">Size</div>
+              <div>{lead.size}</div>
+            </div>
+          </div>
         </div>
-        <Separator className="mb-4" />
-        <div className="space-y-4">
-          <div className="flex">
-            <div className="w-1/3 text-muted-foreground">Company Name</div>
-            <div>{lead.name}</div>
-          </div>
-          <div className="flex">
-            <div className="w-1/3 text-muted-foreground">Industry</div>
-            <div>{lead.industry}</div>
-          </div>
-          <div className="flex">
-            <div className="w-1/3 text-muted-foreground">Location</div>
-            <div>{lead.location}</div>
-          </div>
-          <div className="flex">
-            <div className="w-1/3 text-muted-foreground">Size</div>
-            <div>{lead.size}</div>
-          </div>
-        </div>
-      </div>
 
-      <div>
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="text-xl font-semibold">Contact Details</h3>
-          <Button variant="ghost" size="icon" className="h-8 w-8">
-            <Edit className="h-4 w-4" />
-          </Button>
-        </div>
-        <Separator className="mb-4" />
-        <div className="space-y-4">
-          <div className="flex">
-            <div className="w-1/3 text-muted-foreground">Contact Name</div>
-            <div>{lead.contactName}</div>
+        <div>
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-xl font-semibold">Contact Details</h3>
+            <Button variant="ghost" size="icon" className="h-8 w-8">
+              <Edit className="h-4 w-4" />
+            </Button>
           </div>
-          <div className="flex">
-            <div className="w-1/3 text-muted-foreground">Email</div>
-            <div>{lead.email}</div>
-          </div>
-          <div className="flex">
-            <div className="w-1/3 text-muted-foreground">Phone</div>
-            <div>{lead.phone}</div>
-          </div>
-          <div className="flex">
-            <div className="w-1/3 text-muted-foreground">Job Title</div>
-            <div>{lead.jobTitle}</div>
-          </div>
-          <div className="flex">
-            <div className="w-1/3 text-muted-foreground">Level</div>
-            <div>{lead.level}</div>
+          <Separator className="mb-4" />
+          <div className="space-y-4">
+            <div className="flex">
+              <div className="w-1/3 text-muted-foreground">Contact Name</div>
+              <div>{lead.contactName}</div>
+            </div>
+            <div className="flex">
+              <div className="w-1/3 text-muted-foreground">Email</div>
+              <div>{lead.email}</div>
+            </div>
+            <div className="flex">
+              <div className="w-1/3 text-muted-foreground">Phone</div>
+              <div>{lead.phone}</div>
+            </div>
+            <div className="flex">
+              <div className="w-1/3 text-muted-foreground">Job Title</div>
+              <div>{lead.jobTitle}</div>
+            </div>
+            <div className="flex">
+              <div className="w-1/3 text-muted-foreground">Level</div>
+              <div>{lead.level}</div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 const Leads = () => {
   const [selectedLead, setSelectedLead] = useState<typeof mockLeads[0] | null>(mockLeads[0]);
