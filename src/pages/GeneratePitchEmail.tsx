@@ -5,8 +5,10 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Bold, Italic, Link, List, ListOrdered, ThumbsDown, ThumbsUp, RotateCw, ArrowDown, Copy, Send } from 'lucide-react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const GeneratePitchEmail = () => {
+  const navigate = useNavigate();
   const [emailSubject, setEmailSubject] = useState('Unlock Global Growth Effortlessly with AI-Powered EOR');
   const [emailBody, setEmailBody] = useState(`Hi [Name],
 
@@ -21,6 +23,10 @@ We are a global Employer of Record (EOR) platform designed to make international
     const newText = e.target.value;
     setEmailBody(newText);
     setCharCount(newText.length);
+  };
+
+  const handleBack = () => {
+    navigate(-1);
   };
 
   return (
@@ -159,7 +165,7 @@ We are a global Employer of Record (EOR) platform designed to make international
         </div>
         
         <div className="flex justify-end mt-8 gap-4">
-          <Button variant="outline" onClick={() => window.history.back()}>
+          <Button variant="outline" onClick={handleBack}>
             Back
           </Button>
           <Button className="gap-2">

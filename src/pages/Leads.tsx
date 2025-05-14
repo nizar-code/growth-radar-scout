@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/button';
@@ -128,7 +129,7 @@ const LeadDetails = ({ lead }: { lead: typeof mockLeads[0] }) => {
   const navigate = useNavigate();
 
   const handleGeneratePitch = () => {
-    navigate('/pitch-generator');
+    navigate('/generate-pitch-email');
   };
 
   return (
