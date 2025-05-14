@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LeadDashboard from "./pages/LeadDashboard";
 import Leads from "./pages/Leads";
 import PitchGenerator from "./pages/PitchGenerator";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,6 +23,7 @@ const App = () => (
           <Route path="/dashboard" element={<LeadDashboard />} />
           <Route path="/leads" element={<Leads />} />
           <Route path="/pitch-generator" element={<PitchGenerator />} />
+          <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

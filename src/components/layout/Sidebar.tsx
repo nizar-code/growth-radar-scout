@@ -5,7 +5,8 @@ import {
   BarChart2,
   Users,
   Search,
-  Edit
+  Edit,
+  Settings
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -68,6 +69,12 @@ export function Sidebar() {
           label="Pitch Generator" 
           href="/pitch-generator"
           active={path === '/pitch-generator'}
+        />
+        <SidebarItem 
+          icon={<Settings size={18} />} 
+          label="Settings" 
+          href="/settings"
+          active={path === '/settings'}
         />
       </nav>
     </div>
