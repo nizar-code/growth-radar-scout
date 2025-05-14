@@ -1,11 +1,11 @@
-
 import React, { useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ArrowRight, MoreHorizontal, Search } from 'lucide-react';
+import { ArrowRight, Edit, MoreHorizontal, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Separator } from '@/components/ui/separator';
 
 // Mock lead data 
 const mockLeads = [
@@ -14,48 +14,112 @@ const mockLeads = [
     name: 'TechInnovators Inc.',
     country: 'us',
     status: 'New',
+    industry: 'Technology',
+    location: 'North America',
+    size: '200 - 500 Employees',
+    contactName: 'Sarah Johnson',
+    email: 'sarah.j@techinnovators.com',
+    phone: '+1 (234) 567 89101',
+    jobTitle: 'CTO',
+    level: 'C Suite',
   },
   {
     id: 2,
     name: 'Innovate IT',
     country: 'gb',
     status: 'New',
+    industry: 'Technology',
+    location: 'Europe',
+    size: '50 - 200 Employees',
+    contactName: 'Mark Williams',
+    email: 'mark@innovateit.com',
+    phone: '+44 789 123 4567',
+    jobTitle: 'CIO',
+    level: 'C Suite',
   },
   {
     id: 3,
     name: 'Future Tech',
     country: 'dk',
     status: 'New',
+    industry: 'Technology',
+    location: 'Europe',
+    size: '1000+ Employees',
+    contactName: 'Emily Olsen',
+    email: 'emily@futuretech.dk',
+    phone: '+45 6789 0123',
+    jobTitle: 'Head of Innovation',
+    level: 'Director',
   },
   {
     id: 4,
     name: 'Planitech',
     country: 'es',
     status: 'Active',
+    industry: 'Consulting',
+    location: 'Europe',
+    size: '20 - 50 Employees',
+    contactName: 'Carlos Pérez',
+    email: 'carlos@planitech.es',
+    phone: '+34 987 654 321',
+    jobTitle: 'Managing Director',
+    level: 'Executive',
   },
   {
     id: 5,
     name: 'Erogeniscience',
     country: 'se',
     status: 'Active',
+    industry: 'Biotech',
+    location: 'Europe',
+    size: '500 - 1000 Employees',
+    contactName: 'Astrid Lindgren',
+    email: 'astrid@erogeniscience.se',
+    phone: '+46 8 1234567',
+    jobTitle: 'Research Director',
+    level: 'Director',
   },
   {
     id: 6,
     name: 'Techtronics',
     country: 'cn',
     status: 'Active',
+    industry: 'Electronics',
+    location: 'Asia',
+    size: '1000+ Employees',
+    contactName: 'Li Wei',
+    email: 'li.wei@techtronics.cn',
+    phone: '+86 138 0000 1111',
+    jobTitle: 'VP of Engineering',
+    level: 'VP',
   },
   {
     id: 7,
     name: 'DataLink',
     country: 'cz',
     status: 'Active',
+    industry: 'Data Services',
+    location: 'Europe',
+    size: '200 - 500 Employees',
+    contactName: 'Jan Novák',
+    email: 'jan.novak@datalink.cz',
+    phone: '+420 777 888 999',
+    jobTitle: 'Data Architect',
+    level: 'Manager',
   },
   {
     id: 8,
     name: 'CloudMatrix',
     country: 'ca',
     status: 'At Risk',
+    industry: 'Software',
+    location: 'North America',
+    size: '50 - 200 Employees',
+    contactName: 'John Smith',
+    email: 'john.smith@cloudmatrix.ca',
+    phone: '+1 416 123 4567',
+    jobTitle: 'Software Engineer',
+    level: 'Employee',
   },
 ];
 
@@ -91,92 +155,121 @@ const LeadDetails = ({ lead }: { lead: typeof mockLeads[0] }) => (
       </div>
     </div>
 
-    <div className="grid grid-cols-2 gap-4">
-      <Card className="bg-card/50 border border-border">
-        <CardContent className="p-4">
-          <div className="flex justify-between py-2">
-            <div className="text-sm text-muted-foreground">Engaged</div>
-            <div>Multiple Channels</div>
-          </div>
-          <div className="flex justify-between py-2">
-            <div className="text-sm text-muted-foreground">Last Engaged</div>
-            <div>2 hours ago</div>
-          </div>
-          <div className="flex justify-between py-2">
-            <div className="text-sm text-muted-foreground">Next Steps</div>
-            <div>Send Email Pitch</div>
-          </div>
-          <div className="flex justify-between py-2">
-            <div className="text-sm text-muted-foreground">Priority</div>
-            <Badge variant="outline" className="bg-red-600/20 text-red-400 border-red-600/20">High</Badge>
-          </div>
-          <div className="flex justify-between py-2">
-            <div className="text-sm text-muted-foreground">Sources</div>
-            <div className="flex gap-2">
-              <span className="text-blue-400">LinkedIn</span>
-              <span className="text-blue-400">Glassdoor</span>
-              <Button variant="link" size="sm" className="p-0 text-sm text-primary h-auto">
-                See Details <ArrowRight size={14} className="ml-1" />
-              </Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-
-    <div>
-      <h3 className="text-lg font-semibold mb-4">Lead Scores</h3>
-      <div className="space-y-4">
-        <div>
-          <div className="flex justify-between mb-2">
-            <span className="text-sm">Fit Score</span>
-            <span className="font-medium">89%</span>
-          </div>
-          <div className="h-2 w-full bg-muted rounded-full">
-            <div className="h-2 bg-blue-500 rounded-full" style={{ width: '89%' }}></div>
-          </div>
+    <div className="space-y-6">
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-xl font-semibold">Company Information</h3>
+          <Button variant="ghost" size="icon" className="h-8 w-8">
+            <Edit className="h-4 w-4" />
+          </Button>
         </div>
-        <div>
-          <div className="flex justify-between mb-2">
-            <span className="text-sm">Intent Score</span>
-            <span className="font-medium">78%</span>
+        <Separator className="mb-4" />
+        <div className="space-y-4">
+          <div className="flex">
+            <div className="w-1/3 text-muted-foreground">Company Name</div>
+            <div>{lead.name}</div>
           </div>
-          <div className="h-2 w-full bg-muted rounded-full">
-            <div className="h-2 bg-blue-500 rounded-full" style={{ width: '78%' }}></div>
+          <div className="flex">
+            <div className="w-1/3 text-muted-foreground">Industry</div>
+            <div>{lead.industry}</div>
+          </div>
+          <div className="flex">
+            <div className="w-1/3 text-muted-foreground">Location</div>
+            <div>{lead.location}</div>
+          </div>
+          <div className="flex">
+            <div className="w-1/3 text-muted-foreground">Size</div>
+            <div>{lead.size}</div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div>
-      <h3 className="text-lg font-semibold mb-4">ICP Matching Criteria</h3>
-      <div className="space-y-4">
-        <div className="flex justify-between items-center border-b border-border py-3">
-          <span className="text-sm">Ideal Customer Profile</span>
-          <div className="flex justify-between items-center gap-4">
-            <span>Mid-sized technology companies seeking cloud solutions</span>
-            <span className="text-green-500">✓</span>
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-xl font-semibold">Contact Details</h3>
+          <Button variant="ghost" size="icon" className="h-8 w-8">
+            <Edit className="h-4 w-4" />
+          </Button>
+        </div>
+        <Separator className="mb-4" />
+        <div className="space-y-4">
+          <div className="flex">
+            <div className="w-1/3 text-muted-foreground">Contact Name</div>
+            <div>{lead.contactName}</div>
+          </div>
+          <div className="flex">
+            <div className="w-1/3 text-muted-foreground">Email</div>
+            <div>{lead.email}</div>
+          </div>
+          <div className="flex">
+            <div className="w-1/3 text-muted-foreground">Phone</div>
+            <div>{lead.phone}</div>
+          </div>
+          <div className="flex">
+            <div className="w-1/3 text-muted-foreground">Job Title</div>
+            <div>{lead.jobTitle}</div>
+          </div>
+          <div className="flex">
+            <div className="w-1/3 text-muted-foreground">Level</div>
+            <div>{lead.level}</div>
           </div>
         </div>
-        <div className="flex justify-between items-center border-b border-border py-3">
-          <span className="text-sm">Geography</span>
-          <div className="flex justify-between items-center gap-4">
-            <span>North America</span>
-            <span className="text-green-500">✓</span>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold mb-4">Lead Scores</h3>
+        <div className="space-y-4">
+          <div>
+            <div className="flex justify-between mb-2">
+              <span className="text-sm">Fit Score</span>
+              <span className="font-medium">89</span>
+            </div>
+            <div className="h-2 w-full bg-muted rounded-full">
+              <div className="h-2 bg-blue-500 rounded-full" style={{ width: '89%' }}></div>
+            </div>
+          </div>
+          <div>
+            <div className="flex justify-between mb-2">
+              <span className="text-sm">Intent Score</span>
+              <span className="font-medium">78</span>
+            </div>
+            <div className="h-2 w-full bg-muted rounded-full">
+              <div className="h-2 bg-blue-500 rounded-full" style={{ width: '78%' }}></div>
+            </div>
           </div>
         </div>
-        <div className="flex justify-between items-center border-b border-border py-3">
-          <span className="text-sm">Annual Revenue</span>
-          <div className="flex justify-between items-center gap-4">
-            <span>$50M - $100M</span>
-            <span className="text-green-500">✓</span>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold mb-4">ICP Matching Criteria</h3>
+        <div className="space-y-4">
+          <div className="flex justify-between items-center border-b border-border py-3">
+            <span className="text-sm">Ideal Customer Profile</span>
+            <div className="flex justify-between items-center gap-4">
+              <span>Mid-sized technology companies seeking cloud solutions</span>
+              <span className="text-green-500">✓</span>
+            </div>
           </div>
-        </div>
-        <div className="flex justify-between items-center border-b border-border py-3">
-          <span className="text-sm">Actively Hiring In</span>
-          <div className="flex justify-between items-center gap-4">
-            <span>Spain, Italy, France, Germany, Sweden, Ireland</span>
-            <span className="text-green-500">✓</span>
+          <div className="flex justify-between items-center border-b border-border py-3">
+            <span className="text-sm">Geography</span>
+            <div className="flex justify-between items-center gap-4">
+              <span>North America</span>
+              <span className="text-green-500">✓</span>
+            </div>
+          </div>
+          <div className="flex justify-between items-center border-b border-border py-3">
+            <span className="text-sm">Annual Revenue</span>
+            <div className="flex justify-between items-center gap-4">
+              <span>$50M - $100M</span>
+              <span className="text-green-500">✓</span>
+            </div>
+          </div>
+          <div className="flex justify-between items-center border-b border-border py-3">
+            <span className="text-sm">Actively Hiring In</span>
+            <div className="flex justify-between items-center gap-4">
+              <span>Spain, Italy, France, Germany, Sweden, Ireland</span>
+              <span className="text-green-500">✓</span>
+            </div>
           </div>
         </div>
       </div>
