@@ -1,10 +1,9 @@
-
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Bold, Italic, Link, List, ListOrdered, ThumbsDown, ThumbsUp, RotateCw, ArrowDown, Copy, Send } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const GeneratePitchEmail = () => {
@@ -26,7 +25,7 @@ We are a global Employer of Record (EOR) platform designed to make international
   };
 
   const handleBack = () => {
-    navigate(-1);
+    navigate('/leads');
   };
 
   return (
