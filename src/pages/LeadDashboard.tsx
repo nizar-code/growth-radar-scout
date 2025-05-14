@@ -11,8 +11,28 @@ import {
   Users, 
   User
 } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { API } from '@/services/api';
 
 const LeadDashboard = () => {
+  // Fetch score metrics
+  const { data: scoreMetrics } = useQuery({
+    queryKey: ['leadDashboard', 'scoreMetrics'],
+    queryFn: API.leadDashboard.getScoreMetrics
+  });
+  
+  // Fetch lead counts
+  const { data: leadCounts } = useQuery({
+    queryKey: ['leadDashboard', 'leadCounts'],
+    queryFn: API.leadDashboard.getLeadCountsByType
+  });
+  
+  // Fetch top regions by sector
+  const { data: topRegions = [] } = useQuery({
+    queryKey: ['leadDashboard', 'topRegions'],
+    queryFn: API.leadDashboard.getTopRegionsBySector
+  });
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -27,7 +47,7 @@ const LeadDashboard = () => {
               <div className="flex flex-col items-center space-y-2">
                 <BarChart className="h-8 w-8 text-primary" />
                 <p className="text-sm text-muted-foreground">Fit Scores</p>
-                <h2 className="text-4xl font-bold">85%</h2>
+                <h2 className="text-4xl font-bold">{scoreMetrics?.fitScores || 0}%</h2>
                 <div className="bg-green-600/20 text-green-600 text-xs px-2 py-1 rounded">
                   Up 28.4%
                 </div>
@@ -40,7 +60,7 @@ const LeadDashboard = () => {
               <div className="flex flex-col items-center space-y-2">
                 <BarChart className="h-8 w-8 text-primary" />
                 <p className="text-sm text-muted-foreground">Intent Scores</p>
-                <h2 className="text-4xl font-bold">70%</h2>
+                <h2 className="text-4xl font-bold">{scoreMetrics?.intentScores || 0}%</h2>
                 <div className="bg-green-600/20 text-green-600 text-xs px-2 py-1 rounded">
                   Up 32%
                 </div>
@@ -53,7 +73,7 @@ const LeadDashboard = () => {
               <div className="flex flex-col items-center space-y-2">
                 <User className="h-8 w-8 text-primary" />
                 <p className="text-sm text-muted-foreground">Match to Ideal Profile</p>
-                <h2 className="text-4xl font-bold">60%</h2>
+                <h2 className="text-4xl font-bold">{scoreMetrics?.idealProfileMatch || 0}%</h2>
                 <div className="bg-green-600/20 text-green-600 text-xs px-2 py-1 rounded">
                   Up 26.5%
                 </div>
@@ -72,22 +92,22 @@ const LeadDashboard = () => {
                   <div className="flex items-center gap-2">
                     <div className="h-3 w-3 rounded-full bg-blue-500"></div>
                     <span>New Leads</span>
-                    <span className="ml-auto font-semibold">323</span>
+                    <span className="ml-auto font-semibold">{leadCounts?.newLeads || 0}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="h-3 w-3 rounded-full bg-green-500"></div>
                     <span>Active Leads</span>
-                    <span className="ml-auto font-semibold">436</span>
+                    <span className="ml-auto font-semibold">{leadCounts?.activeLeads || 0}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="h-3 w-3 rounded-full bg-cyan-500"></div>
                     <span>Qualified</span>
-                    <span className="ml-auto font-semibold">221</span>
+                    <span className="ml-auto font-semibold">{leadCounts?.qualified || 0}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="h-3 w-3 rounded-full bg-gray-400"></div>
                     <span>Converted</span>
-                    <span className="ml-auto font-semibold">321</span>
+                    <span className="ml-auto font-semibold">{leadCounts?.converted || 0}</span>
                   </div>
                 </div>
                 
@@ -95,12 +115,12 @@ const LeadDashboard = () => {
                   <div className="flex items-center gap-2">
                     <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
                     <span>Intent: High</span>
-                    <span className="ml-auto font-semibold">53</span>
+                    <span className="ml-auto font-semibold">{leadCounts?.highIntent || 0}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="h-3 w-3 rounded-full bg-red-500"></div>
                     <span>At Risk</span>
-                    <span className="ml-auto font-semibold">32</span>
+                    <span className="ml-auto font-semibold">{leadCounts?.atRisk || 0}</span>
                   </div>
                 </div>
               </div>
@@ -120,41 +140,17 @@ const LeadDashboard = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  <TableRow>
-                    <TableCell>Tech</TableCell>
-                    <TableCell>North America</TableCell>
-                    <TableCell className="text-right">
-                      <span className="bg-blue-600/20 text-blue-600 text-xs px-2 py-1 rounded">104</span>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Finance</TableCell>
-                    <TableCell>Europe</TableCell>
-                    <TableCell className="text-right">
-                      <span className="bg-blue-600/20 text-blue-600 text-xs px-2 py-1 rounded">87</span>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Healthcare</TableCell>
-                    <TableCell>Asia</TableCell>
-                    <TableCell className="text-right">
-                      <span className="bg-blue-600/20 text-blue-600 text-xs px-2 py-1 rounded">73</span>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Retail</TableCell>
-                    <TableCell>Australia</TableCell>
-                    <TableCell className="text-right">
-                      <span className="bg-blue-600/20 text-blue-600 text-xs px-2 py-1 rounded">65</span>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Energy</TableCell>
-                    <TableCell>Africa</TableCell>
-                    <TableCell className="text-right">
-                      <span className="bg-blue-600/20 text-blue-600 text-xs px-2 py-1 rounded">57</span>
-                    </TableCell>
-                  </TableRow>
+                  {topRegions.map((region, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{region.sector}</TableCell>
+                      <TableCell>{region.region}</TableCell>
+                      <TableCell className="text-right">
+                        <span className="bg-blue-600/20 text-blue-600 text-xs px-2 py-1 rounded">
+                          {region.leadCount}
+                        </span>
+                      </TableCell>
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             </CardContent>

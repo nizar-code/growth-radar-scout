@@ -1,10 +1,16 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { expansionHotspots } from '@/services/mockData';
 import { MapPin } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { API } from '@/services/api';
 
 export function ExpansionHotspots() {
+  const { data: expansionHotspots = [] } = useQuery({
+    queryKey: ['expansionHotspots'],
+    queryFn: API.metrics.getExpansionHotspots
+  });
+
   return (
     <Card>
       <CardHeader>

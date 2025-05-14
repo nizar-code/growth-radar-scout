@@ -10,9 +10,15 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-import { hiringTrends } from '@/services/mockData';
+import { useQuery } from '@tanstack/react-query';
+import { API } from '@/services/api';
 
 export function HiringTrendChart() {
+  const { data: hiringTrends = [] } = useQuery({
+    queryKey: ['hiringTrends'],
+    queryFn: API.metrics.getHiringTrends
+  });
+
   return (
     <Card className="col-span-full">
       <CardHeader className="pb-2">

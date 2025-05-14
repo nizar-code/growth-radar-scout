@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { StatCard } from '@/components/ui/stat-card';
 import { CompanyCard } from '@/components/companies/CompanyCard';
@@ -10,20 +10,66 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { TrendingUp, MapPin, Users, BookMarked } from 'lucide-react';
-import { mockCompanies, mockIndustries, growthMetrics } from '@/services/mockData';
+import { useQuery } from '@tanstack/react-query';
+import { API } from '@/services/api';
+import { Company } from '@/services/mockData';
 
 const Index = () => {
   const [filterIndustry, setFilterIndustry] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [filteredCompanies, setFilteredCompanies] = useState<Company[]>([]);
   
-  const filteredCompanies = mockCompanies.filter(company => {
-    return (
-      (filterIndustry === 'all' || company.industry === filterIndustry) &&
-      (!searchTerm || 
+  // Fetch companies
+  const { data: companies = [] } = useQuery({
+    queryKey: ['companies'],
+    queryFn: API.companies.getAll
+  });
+  
+  // Fetch industries
+  const { data: industries = [] } = useQuery({
+    queryKey: ['industries'],
+    queryFn: API.industries.getAll
+  });
+  
+  // Fetch growth metrics
+  const { data: metrics } = useQuery({
+    queryKey: ['growthMetrics'],
+    queryFn: API.metrics.getGrowthMetrics
+  });
+  
+  // Apply filters whenever companies, filterIndustry, or searchTerm changes
+  useEffect(() => {
+    let filtered = [...companies];
+    
+    if (filterIndustry !== 'all') {
+      filtered = filtered.filter(company => company.industry === filterIndustry);
+    }
+    
+    if (searchTerm) {
+      filtered = filtered.filter(company => 
         company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         company.industry.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (company.description && company.description.toLowerCase().includes(searchTerm.toLowerCase())))
-    );
+        (company.description && company.description.toLowerCase().includes(searchTerm.toLowerCase()))
+      );
+    }
+    
+    setFilteredCompanies(filtered);
+  }, [companies, filterIndustry, searchTerm]);
+  
+  // Queries for different tabs
+  const { data: expandingCompanies = [] } = useQuery({
+    queryKey: ['companies', 'expanding'],
+    queryFn: API.companies.getExpanding
+  });
+  
+  const { data: hiringCompanies = [] } = useQuery({
+    queryKey: ['companies', 'hiring'],
+    queryFn: API.companies.getHiring
+  });
+  
+  const { data: savedCompanies = [] } = useQuery({
+    queryKey: ['companies', 'saved'],
+    queryFn: API.companies.getSaved
   });
   
   return (
@@ -33,26 +79,26 @@ const Index = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard 
             title="Total Leads" 
-            value={growthMetrics.totalLeads}
+            value={metrics?.totalLeads || 0}
             icon={<BookMarked className="h-5 w-5" />}
             trend={{ value: 12, positive: true }}
           />
           <StatCard 
             title="New Companies" 
-            value={growthMetrics.newCompanies}
+            value={metrics?.newCompanies || 0}
             icon={<TrendingUp className="h-5 w-5" />}
             trend={{ value: 8, positive: true }}
             subtitle="Last 30 days"
           />
           <StatCard 
             title="Saved Leads" 
-            value={growthMetrics.savedLeads}
+            value={metrics?.savedLeads || 0}
             icon={<BookMarked className="h-5 w-5" />}
             trend={{ value: 5, positive: true }}
           />
           <StatCard 
             title="Avg Growth Rate" 
-            value={`${growthMetrics.averageGrowth}%`}
+            value={`${metrics?.averageGrowth || 0}%`}
             icon={<TrendingUp className="h-5 w-5" />}
             trend={{ value: 2.5, positive: true }}
           />
@@ -81,7 +127,7 @@ const Index = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Industries</SelectItem>
-                  {mockIndustries.map((industry) => (
+                  {industries.map((industry) => (
                     <SelectItem key={industry} value={industry}>{industry}</SelectItem>
                   ))}
                 </SelectContent>
@@ -113,8 +159,16 @@ const Index = () => {
             
             <TabsContent value="expanding" className="mt-4">
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                {filteredCompanies
-                  .filter(company => company.expansionLocations && company.expansionLocations.length > 0)
+                {expandingCompanies
+                  .filter(company => 
+                    filterIndustry === 'all' || company.industry === filterIndustry
+                  )
+                  .filter(company => 
+                    !searchTerm || 
+                    company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    company.industry.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    (company.description && company.description.toLowerCase().includes(searchTerm.toLowerCase()))
+                  )
                   .map((company) => (
                     <CompanyCard key={company.id} {...company} />
                   ))}
@@ -123,8 +177,16 @@ const Index = () => {
             
             <TabsContent value="hiring" className="mt-4">
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                {filteredCompanies
-                  .filter(company => company.hiringCount && company.hiringCount >= 150)
+                {hiringCompanies
+                  .filter(company => 
+                    filterIndustry === 'all' || company.industry === filterIndustry
+                  )
+                  .filter(company => 
+                    !searchTerm || 
+                    company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    company.industry.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    (company.description && company.description.toLowerCase().includes(searchTerm.toLowerCase()))
+                  )
                   .map((company) => (
                     <CompanyCard key={company.id} {...company} />
                   ))}
@@ -133,8 +195,16 @@ const Index = () => {
             
             <TabsContent value="saved" className="mt-4">
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                {filteredCompanies
-                  .filter(company => company.saved)
+                {savedCompanies
+                  .filter(company => 
+                    filterIndustry === 'all' || company.industry === filterIndustry
+                  )
+                  .filter(company => 
+                    !searchTerm || 
+                    company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    company.industry.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    (company.description && company.description.toLowerCase().includes(searchTerm.toLowerCase()))
+                  )
                   .map((company) => (
                     <CompanyCard key={company.id} {...company} />
                   ))}

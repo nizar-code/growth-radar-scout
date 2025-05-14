@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -7,125 +7,11 @@ import { ArrowRight, Edit, MoreHorizontal, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
 import { useNavigate } from 'react-router-dom';
-
-// Mock lead data 
-const mockLeads = [
-  {
-    id: 1,
-    name: 'TechInnovators Inc.',
-    country: 'us',
-    status: 'New',
-    industry: 'Technology',
-    location: 'North America',
-    size: '200 - 500 Employees',
-    contactName: 'Sarah Johnson',
-    email: 'sarah.j@techinnovators.com',
-    phone: '+1 (234) 567 89101',
-    jobTitle: 'CTO',
-    level: 'C Suite',
-  },
-  {
-    id: 2,
-    name: 'Innovate IT',
-    country: 'gb',
-    status: 'New',
-    industry: 'Technology',
-    location: 'Europe',
-    size: '50 - 200 Employees',
-    contactName: 'Mark Williams',
-    email: 'mark@innovateit.com',
-    phone: '+44 789 123 4567',
-    jobTitle: 'CIO',
-    level: 'C Suite',
-  },
-  {
-    id: 3,
-    name: 'Future Tech',
-    country: 'dk',
-    status: 'New',
-    industry: 'Technology',
-    location: 'Europe',
-    size: '1000+ Employees',
-    contactName: 'Emily Olsen',
-    email: 'emily@futuretech.dk',
-    phone: '+45 6789 0123',
-    jobTitle: 'Head of Innovation',
-    level: 'Director',
-  },
-  {
-    id: 4,
-    name: 'Planitech',
-    country: 'es',
-    status: 'Active',
-    industry: 'Consulting',
-    location: 'Europe',
-    size: '20 - 50 Employees',
-    contactName: 'Carlos Pérez',
-    email: 'carlos@planitech.es',
-    phone: '+34 987 654 321',
-    jobTitle: 'Managing Director',
-    level: 'Executive',
-  },
-  {
-    id: 5,
-    name: 'Erogeniscience',
-    country: 'se',
-    status: 'Active',
-    industry: 'Biotech',
-    location: 'Europe',
-    size: '500 - 1000 Employees',
-    contactName: 'Astrid Lindgren',
-    email: 'astrid@erogeniscience.se',
-    phone: '+46 8 1234567',
-    jobTitle: 'Research Director',
-    level: 'Director',
-  },
-  {
-    id: 6,
-    name: 'Techtronics',
-    country: 'cn',
-    status: 'Active',
-    industry: 'Electronics',
-    location: 'Asia',
-    size: '1000+ Employees',
-    contactName: 'Li Wei',
-    email: 'li.wei@techtronics.cn',
-    phone: '+86 138 0000 1111',
-    jobTitle: 'VP of Engineering',
-    level: 'VP',
-  },
-  {
-    id: 7,
-    name: 'DataLink',
-    country: 'cz',
-    status: 'Active',
-    industry: 'Data Services',
-    location: 'Europe',
-    size: '200 - 500 Employees',
-    contactName: 'Jan Novák',
-    email: 'jan.novak@datalink.cz',
-    phone: '+420 777 888 999',
-    jobTitle: 'Data Architect',
-    level: 'Manager',
-  },
-  {
-    id: 8,
-    name: 'CloudMatrix',
-    country: 'ca',
-    status: 'At Risk',
-    industry: 'Software',
-    location: 'North America',
-    size: '50 - 200 Employees',
-    contactName: 'John Smith',
-    email: 'john.smith@cloudmatrix.ca',
-    phone: '+1 416 123 4567',
-    jobTitle: 'Software Engineer',
-    level: 'Employee',
-  },
-];
+import { useQuery } from '@tanstack/react-query';
+import { API, Lead } from '@/services/api';
 
 // Lead details component for when a lead is selected
-const LeadDetails = ({ lead }: { lead: typeof mockLeads[0] }) => {
+const LeadDetails = ({ lead }: { lead: Lead }) => {
   const navigate = useNavigate();
 
   const handleGeneratePitch = () => {
@@ -169,11 +55,11 @@ const LeadDetails = ({ lead }: { lead: typeof mockLeads[0] }) => {
           <div className="grid grid-cols-2 gap-4">
             <div className="p-4 bg-accent/50 rounded-lg">
               <div className="text-sm text-muted-foreground">Fit Score</div>
-              <div className="text-2xl font-semibold mt-1">89</div>
+              <div className="text-2xl font-semibold mt-1">{lead.scores?.fit || 'N/A'}</div>
             </div>
             <div className="p-4 bg-accent/50 rounded-lg">
               <div className="text-sm text-muted-foreground">Intent Score</div>
-              <div className="text-2xl font-semibold mt-1">78</div>
+              <div className="text-2xl font-semibold mt-1">{lead.scores?.intent || 'N/A'}</div>
             </div>
           </div>
         </div>
@@ -185,28 +71,36 @@ const LeadDetails = ({ lead }: { lead: typeof mockLeads[0] }) => {
               <span className="text-sm">Ideal Customer Profile</span>
               <div className="flex justify-between items-center gap-4">
                 <span>Mid-sized technology companies seeking cloud solutions</span>
-                <span className="text-green-500">✓</span>
+                <span className={lead.icpMatching?.profile ? "text-green-500" : "text-red-500"}>
+                  {lead.icpMatching?.profile ? "✓" : "✗"}
+                </span>
               </div>
             </div>
             <div className="flex justify-between items-center border-b border-border py-3">
               <span className="text-sm">Geography</span>
               <div className="flex justify-between items-center gap-4">
                 <span>North America</span>
-                <span className="text-green-500">✓</span>
+                <span className={lead.icpMatching?.geography ? "text-green-500" : "text-red-500"}>
+                  {lead.icpMatching?.geography ? "✓" : "✗"}
+                </span>
               </div>
             </div>
             <div className="flex justify-between items-center border-b border-border py-3">
               <span className="text-sm">Annual Revenue</span>
               <div className="flex justify-between items-center gap-4">
                 <span>$50M - $100M</span>
-                <span className="text-green-500">✓</span>
+                <span className={lead.icpMatching?.revenue ? "text-green-500" : "text-red-500"}>
+                  {lead.icpMatching?.revenue ? "✓" : "✗"}
+                </span>
               </div>
             </div>
             <div className="flex justify-between items-center border-b border-border py-3">
               <span className="text-sm">Actively Hiring In</span>
               <div className="flex justify-between items-center gap-4">
                 <span>Spain, Italy, France, Germany, Sweden, Ireland</span>
-                <span className="text-green-500">✓</span>
+                <span className={lead.icpMatching?.hiring ? "text-green-500" : "text-red-500"}>
+                  {lead.icpMatching?.hiring ? "✓" : "✗"}
+                </span>
               </div>
             </div>
           </div>
@@ -277,7 +171,27 @@ const LeadDetails = ({ lead }: { lead: typeof mockLeads[0] }) => {
 };
 
 const Leads = () => {
-  const [selectedLead, setSelectedLead] = useState<typeof mockLeads[0] | null>(mockLeads[0]);
+  const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
+  const [searchTerm, setSearchTerm] = useState<string>('');
+
+  // Fetch leads from API
+  const { data: leads = [] } = useQuery({
+    queryKey: ['leads'],
+    queryFn: API.leads.getAll
+  });
+
+  // Set first lead as selected when data loads
+  useEffect(() => {
+    if (leads.length > 0 && !selectedLead) {
+      setSelectedLead(leads[0]);
+    }
+  }, [leads, selectedLead]);
+
+  const filteredLeads = leads.filter(lead => 
+    lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    lead.contactName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    lead.industry.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <DashboardLayout>
@@ -302,11 +216,13 @@ const Leads = () => {
                 type="text"
                 placeholder="Search leads..."
                 className="w-full rounded-md pl-9 py-2 bg-accent/50 border-none focus:ring-1 focus:ring-primary text-sm"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
 
             <div className="space-y-2 overflow-y-auto flex-1">
-              {mockLeads.map((lead) => (
+              {filteredLeads.map((lead) => (
                 <div
                   key={lead.id}
                   onClick={() => setSelectedLead(lead)}
