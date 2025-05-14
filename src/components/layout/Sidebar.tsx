@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { 
   BarChart2,
+  Users,
   Search
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -54,6 +55,12 @@ export function Sidebar() {
           label="Lead Dashboard" 
           href="/dashboard"
           active={path === '/' || path === '/dashboard'}
+        />
+        <SidebarItem 
+          icon={<Users size={18} />} 
+          label="Leads" 
+          href="/leads"
+          active={path === '/leads'}
         />
       </nav>
     </div>
