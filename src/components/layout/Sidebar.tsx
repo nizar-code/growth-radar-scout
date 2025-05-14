@@ -6,7 +6,8 @@ import {
   Users,
   Search,
   Edit,
-  Settings
+  Settings,
+  Mail
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -69,6 +70,12 @@ export function Sidebar() {
           label="Pitch Generator" 
           href="/pitch-generator"
           active={path === '/pitch-generator'}
+        />
+        <SidebarItem 
+          icon={<Mail size={18} />} 
+          label="Generate Pitch Email" 
+          href="/generate-pitch-email"
+          active={path === '/generate-pitch-email'}
         />
         <SidebarItem 
           icon={<Settings size={18} />} 
